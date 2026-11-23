@@ -1,0 +1,8 @@
+﻿/* ==========================================================================
+   ShopLite Master Stylesheet
+   Cloud Crafters - Multi-Service E-Commerce Product Management
+   ========================================================================== */
+
+@import './styles/variables.css';
+@import './styles/global.css';
+@import './styles/components.css';
