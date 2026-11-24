@@ -1,10 +1,12 @@
 ﻿-- =============================================================================
 -- ShopLite Database Schema & Seed Data
--- Service: Catalog API (PostgreSQL 16)
+-- Services: Catalog API & Inventory API (PostgreSQL 16)
 -- Cloud Crafters Architecture
 -- =============================================================================
 
--- Ensure products table exists with robust constraints
+-- -----------------------------------------------------------------------------
+-- 1. Products Table (Catalog Service)
+-- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
     sku VARCHAR(100) UNIQUE NOT NULL,
@@ -51,3 +53,43 @@ VALUES
     ('SHP-APP-09', 'Merino Wool Turtleneck', 'Apparel', 195.00, 'Fine-gauge extra-fine Australian merino wool with ribbed cuffs and hem.', 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=600&q=80'),
     ('SHP-WCH-10', 'Bauhaus Minimalist Automatic', 'Watches & Jewelry', 410.00, 'Sleek white dial with tempered blue hands and mesh stainless steel band.', 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=600&q=80')
 ON CONFLICT (sku) DO NOTHING;
+
+-- -----------------------------------------------------------------------------
+-- 2. Inventory Table (Inventory Service)
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS inventory (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    quantity INT NOT NULL DEFAULT 0 CHECK (quantity >= 0),
+    reorder_level INT NOT NULL DEFAULT 10 CHECK (reorder_level >= 0),
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_inventory_product_id UNIQUE (product_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_inventory_product_id ON inventory(product_id);
+
+DROP TRIGGER IF EXISTS update_inventory_updated_at ON inventory;
+CREATE TRIGGER update_inventory_updated_at
+    BEFORE UPDATE ON inventory
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- Seed initial inventory linked to products
+INSERT INTO inventory (product_id, quantity, reorder_level)
+SELECT id,
+       CASE id
+           WHEN 1 THEN 45
+           WHEN 2 THEN 18
+           WHEN 3 THEN 8   -- low stock alert (< 10)
+           WHEN 4 THEN 25
+           WHEN 5 THEN 14
+           WHEN 6 THEN 35
+           WHEN 7 THEN 20
+           WHEN 8 THEN 50
+           WHEN 9 THEN 12
+           WHEN 10 THEN 28
+           ELSE 20
+       END,
+       10
+FROM products
+ON CONFLICT (product_id) DO NOTHING;
