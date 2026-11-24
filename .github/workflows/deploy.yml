@@ -9,8 +9,9 @@ on:
       - 'docs/**'
   workflow_dispatch:
 
-# Top-level default permissions (restricted by default)
+# Workflow-level permission envelope: allow OIDC token generation & checkout
 permissions:
+  id-token: write
   contents: read
 
 concurrency:
