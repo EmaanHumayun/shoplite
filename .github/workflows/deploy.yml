@@ -1,0 +1,176 @@
+name: ShopLite Continuous Deployment (AWS OIDC & EC2)
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  workflow_dispatch:
+
+# Critical for AWS OpenID Connect (OIDC) token exchange
+permissions:
+  id-token: write   # Required to request JWT from GitHub OIDC provider
+  contents: read    # Required to checkout the repository code
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  # ============================================================================
+  # Job 1: Build Docker Images and Push to Amazon ECR via OIDC
+  # ============================================================================
+  build-and-push-ecr:
+    name: Build & Push Images to AWS ECR
+    runs-on: ubuntu-latest
+    outputs:
+      registry: ${{ steps.login-ecr.outputs.registry }}
+      image_tag: ${{ steps.vars.outputs.image_tag }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Image Tag
+        id: vars
+        run: |
+          IMAGE_TAG="${GITHUB_SHA}"
+          echo "image_tag=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
+          echo "Built images will be tagged with SHA: ${IMAGE_TAG}"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Configure AWS Credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          audience: sts.amazonaws.com
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and Push Docker Images to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ steps.vars.outputs.image_tag }}
+        run: |
+          echo "=========================================================="
+          echo "ECR Registry:  $ECR_REGISTRY"
+          echo "AWS Region:    ${{ vars.AWS_REGION }}"
+          echo "AWS Account:   ${{ vars.AWS_ACCOUNT_ID }}"
+          echo "Image Tag:     $IMAGE_TAG"
+          echo "=========================================================="
+
+          # Service directory to ECR repository mapping
+          # Format: "directory:ecr_repository_name"
+          SERVICES=(
+            "frontend:shoplite-frontend"
+            "catalog-service:shoplite-catalog"
+            "inventory-service:shoplite-inventory"
+            "order-service:shoplite-orders"
+          )
+
+          for entry in "${SERVICES[@]}"; do
+            DIR="${entry%%:*}"
+            REPO="${entry##*:}"
+
+            echo "--------------------------------------------------------"
+            echo "Processing service: $DIR -> ECR repository: $REPO"
+
+            if [ -s "$DIR/Dockerfile" ]; then
+              echo "Building image for $DIR..."
+              docker build \
+                -t "$ECR_REGISTRY/$REPO:$IMAGE_TAG" \
+                -t "$ECR_REGISTRY/$REPO:latest" \
+                "$DIR"
+
+              echo "Pushing image $ECR_REGISTRY/$REPO:$IMAGE_TAG..."
+              docker push "$ECR_REGISTRY/$REPO:$IMAGE_TAG"
+
+              echo "Pushing image $ECR_REGISTRY/$REPO:latest..."
+              docker push "$ECR_REGISTRY/$REPO:latest"
+              echo "Successfully pushed $REPO"
+            else
+              echo "Notice: $DIR/Dockerfile is empty or missing. Skipping build/push for $REPO."
+            fi
+          done
+
+  # ============================================================================
+  # Job 2: Deploy to AWS EC2 via SSH
+  # ============================================================================
+  deploy-to-ec2:
+    name: Deploy to EC2 via SSH
+    runs-on: ubuntu-latest
+    needs: [build-and-push-ecr]
+    if: success()
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          audience: sts.amazonaws.com
+
+      - name: Check SSH Credentials Availability
+        id: check-ssh
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          if [ -n "$EC2_HOST" ] && [ -n "$EC2_SSH_KEY" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+            echo "EC2 SSH secrets detected. Proceeding with remote deployment."
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::EC2_HOST or EC2_SSH_KEY secrets are not configured in GitHub Secrets. SSH deployment step will be skipped."
+          fi
+
+      - name: Deploy Application to EC2 via SSH
+        if: steps.check-ssh.outputs.configured == 'true'
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          AWS_REGION: ${{ vars.AWS_REGION }}
+          AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
+          IMAGE_TAG: ${{ needs.build-and-push-ecr.outputs.image_tag }}
+          REGISTRY: ${{ needs.build-and-push-ecr.outputs.registry }}
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER || 'ubuntu' }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          envs: AWS_REGION,AWS_ACCOUNT_ID,IMAGE_TAG,REGISTRY
+          script: |
+            echo "=========================================================="
+            echo "Starting ShopLite Deployment on EC2 Instance"
+            echo "Target Registry: $REGISTRY"
+            echo "Deploying Tag:   $IMAGE_TAG"
+            echo "=========================================================="
+
+            # Authenticate Docker daemon on EC2 against Amazon ECR
+            aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "$REGISTRY"
+
+            # Pull newly pushed images
+            echo "Pulling latest container images..."
+            docker pull "$REGISTRY/shoplite-catalog:$IMAGE_TAG" || true
+            docker pull "$REGISTRY/shoplite-frontend:$IMAGE_TAG" || true
+            docker pull "$REGISTRY/shoplite-inventory:$IMAGE_TAG" || true
+            docker pull "$REGISTRY/shoplite-orders:$IMAGE_TAG" || true
+
+            # If deploy.sh script exists on host, execute deployment
+            if [ -f "scripts/deploy.sh" ]; then
+              bash scripts/deploy.sh
+            elif [ -f "docker-compose.yml" ]; then
+              docker compose pull || true
+              docker compose up -d --remove-orphans
+            fi
+
+            # Clean up old unused dangling images to preserve disk space
+            docker image prune -f
+            echo "ShopLite deployment completed successfully."
