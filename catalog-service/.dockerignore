@@ -1,0 +1,15 @@
+﻿# Catalog Service Docker Ignore
+node_modules/
+npm-debug.log*
+.git/
+.gitignore
+.env
+.env.*
+!.env.example
+test/
+coverage/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+README.md
