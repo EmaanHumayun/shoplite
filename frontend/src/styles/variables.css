@@ -1,0 +1,159 @@
+﻿/* ==========================================================================
+   ShopLite Official Blue & Gold Design System
+   Palette: Light Sky Blue (#8ecae6), Ocean Blue (#219ebc), Deep Navy (#023047),
+            Golden Yellow (#ffb703), Vibrant Orange (#fb8500)
+   ========================================================================== */
+
+:root {
+  /* Official Color Palette */
+  --color-sky-blue: #8ecae6;
+  --color-ocean-blue: #219ebc;
+  --color-deep-navy: #023047;
+  --color-golden-yellow: #ffb703;
+  --color-vibrant-orange: #fb8500;
+
+  /* Tints & Shades for UI hierarchy */
+  --ocean-blue-hover: #1a859e;
+  --ocean-blue-active: #156d82;
+  --ocean-blue-subtle: #e9f5f9;
+  
+  --sky-blue-light: #eef7fc;
+  --sky-blue-subtle: #f3f9fd;
+  --sky-blue-border: #c3e2f1;
+  --sky-blue-hover: #7bbcd8;
+
+  --navy-dark: #011f2e;
+  --navy-surface: #033c59;
+  --navy-border: #0a4d6f;
+  
+  --gold-subtle: #fff9e6;
+  --gold-border: #ffe699;
+  --gold-text: #6b4d00;
+  
+  --orange-subtle: #fff3e6;
+  --orange-border: #ffd199;
+  --orange-hover: #e07600;
+
+  /* Surface & Background (Light Mode) */
+  --bg-page: #f5f9fc;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-subtle: #edf5fa;
+  --bg-muted: #e1edf5;
+  --bg-sidebar: #023047; /* Deep Navy Sidebar */
+  --bg-terminal: #011a26;
+
+  /* Borders & Dividers */
+  --border-subtle: #e5eff5;
+  --border-default: #d3e5ef;
+  --border-strong: #aed1e3;
+  --border-focus: #219ebc;
+
+  /* Text & Typography */
+  --text-primary: #023047; /* Deep Navy primary text */
+  --text-secondary: #245873;
+  --text-muted: #557d93;
+  --text-subtle: #7da1b5;
+  --text-inverse: #ffffff;
+
+  /* Sidebar Specific (Always Deep Navy contrast) */
+  --sidebar-bg: #023047;
+  --sidebar-border: #0a405c;
+  --sidebar-text: #cde6f2;
+  --sidebar-text-muted: #8ecae6;
+  --sidebar-hover: rgba(142, 202, 230, 0.12);
+  --sidebar-active-bg: #219ebc;
+  --sidebar-active-text: #ffffff;
+  --sidebar-footer-bg: #012233;
+
+  /* Semantic Status Indicators */
+  --status-healthy-bg: #e6f7ec;
+  --status-healthy-text: #0d632c;
+  --status-healthy-border: #a9e8be;
+  --status-healthy-dot: #10b981;
+
+  --status-warning-bg: #fff9e6;
+  --status-warning-text: #8a6300;
+  --status-warning-border: #ffdf80;
+  --status-warning-dot: #ffb703;
+
+  --status-critical-bg: #fff1eb;
+  --status-critical-text: #a83800;
+  --status-critical-border: #ffbfa3;
+  --status-critical-dot: #fb8500;
+
+  --status-info-bg: #eef7fc;
+  --status-info-text: #023047;
+  --status-info-border: #b8e0f2;
+  --status-info-dot: #219ebc;
+
+  /* Radii & Shadows */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 3px 0 rgba(2, 48, 71, 0.05);
+  --shadow-md: 0 4px 8px -1px rgba(2, 48, 71, 0.08), 0 2px 4px -2px rgba(2, 48, 71, 0.04);
+  --shadow-lg: 0 10px 18px -3px rgba(2, 48, 71, 0.1), 0 4px 6px -4px rgba(2, 48, 71, 0.05);
+  --shadow-dropdown: 0 16px 32px -8px rgba(2, 48, 71, 0.18);
+
+  /* Fonts */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --transition-fast: 140ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] {
+  --bg-page: #011622;
+  --bg-surface: #022334;
+  --bg-surface-elevated: #032b40;
+  --bg-subtle: #043650;
+  --bg-muted: #064566;
+  --bg-sidebar: #01141f;
+  --bg-terminal: #000c14;
+
+  --border-subtle: #083c58;
+  --border-default: #0c4d70;
+  --border-strong: #166994;
+  --border-focus: #8ecae6;
+
+  --text-primary: #f0f8fc;
+  --text-secondary: #8ecae6;
+  --text-muted: #649eb8;
+  --text-subtle: #457891;
+  --text-inverse: #023047;
+
+  --sidebar-bg: #01141f;
+  --sidebar-border: #062b3d;
+  --sidebar-text: #d0e8f5;
+  --sidebar-text-muted: #8ecae6;
+  --sidebar-hover: rgba(142, 202, 230, 0.1);
+  --sidebar-active-bg: #219ebc;
+  --sidebar-active-text: #ffffff;
+  --sidebar-footer-bg: #000d14;
+
+  --status-healthy-bg: #052615;
+  --status-healthy-text: #6ee7b7;
+  --status-healthy-border: #0f5132;
+
+  --status-warning-bg: #291e00;
+  --status-warning-text: #fde047;
+  --status-warning-border: #735100;
+
+  --status-critical-bg: #2e1200;
+  --status-critical-text: #fdba74;
+  --status-critical-border: #7c2d00;
+
+  --status-info-bg: #042436;
+  --status-info-text: #8ecae6;
+  --status-info-border: #0d4a6b;
+
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 10px 18px -3px rgba(0, 0, 0, 0.7);
+  --shadow-dropdown: 0 20px 40px -8px rgba(0, 0, 0, 0.85);
+}
