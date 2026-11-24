@@ -1,6 +1,6 @@
 ﻿-- =============================================================================
 -- ShopLite Database Schema & Seed Data
--- Services: Catalog API & Inventory API (PostgreSQL 16)
+-- Services: Catalog API, Inventory API & Order API (PostgreSQL 16)
 -- Cloud Crafters Architecture
 -- =============================================================================
 
@@ -93,3 +93,66 @@ SELECT id,
        10
 FROM products
 ON CONFLICT (product_id) DO NOTHING;
+
+-- -----------------------------------------------------------------------------
+-- 3. Orders & Order Items Tables (Order Service)
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS orders (
+    id SERIAL PRIMARY KEY,
+    order_number VARCHAR(50) UNIQUE NOT NULL,
+    customer_name VARCHAR(255) NOT NULL,
+    customer_email VARCHAR(255) NOT NULL,
+    total_amount NUMERIC(10, 2) NOT NULL CHECK (total_amount >= 0),
+    status VARCHAR(50) NOT NULL DEFAULT 'Pending',
+    payment_method VARCHAR(50) DEFAULT 'Credit Card',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_orders_order_number ON orders(order_number);
+CREATE INDEX IF NOT EXISTS idx_orders_customer_email ON orders(customer_email);
+CREATE INDEX IF NOT EXISTS idx_orders_created_at ON orders(created_at DESC);
+
+DROP TRIGGER IF EXISTS update_orders_updated_at ON orders;
+CREATE TRIGGER update_orders_updated_at
+    BEFORE UPDATE ON orders
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE IF NOT EXISTS order_items (
+    id SERIAL PRIMARY KEY,
+    order_id INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    product_id INTEGER NOT NULL REFERENCES products(id),
+    sku VARCHAR(100),
+    name VARCHAR(255),
+    quantity INTEGER NOT NULL CHECK (quantity > 0),
+    unit_price NUMERIC(10, 2) NOT NULL CHECK (unit_price >= 0),
+    subtotal NUMERIC(10, 2) NOT NULL CHECK (subtotal >= 0)
+);
+
+CREATE INDEX IF NOT EXISTS idx_order_items_order_id ON order_items(order_id);
+CREATE INDEX IF NOT EXISTS idx_order_items_product_id ON order_items(product_id);
+
+-- Seed initial orders matching frontend requirements
+INSERT INTO orders (id, order_number, customer_name, customer_email, total_amount, status, payment_method)
+VALUES
+    (1, 'ORD-8941', 'Sophia Montgomery', 'sophia.m@example.com', 653.40, 'Processing', 'Credit Card'),
+    (2, 'ORD-8940', 'Marcus Sterling', 'm.sterling@domain.co.uk', 520.00, 'Delivered', 'PayPal'),
+    (3, 'ORD-8939', 'Elena Rostova', 'elena.rostova@techcorp.io', 302.40, 'Shipped', 'Credit Card'),
+    (4, 'ORD-8938', 'Julian Vance', 'jvance@designstudio.ny', 185.00, 'Processing', 'Apple Pay'),
+    (5, 'ORD-8937', 'Aria Chen', 'aria.chen@cloudventures.com', 765.00, 'Pending', 'Credit Card')
+ON CONFLICT (order_number) DO NOTHING;
+
+-- Reset sequence to prevent ID collisions on future insertions
+SELECT setval('orders_id_seq', (SELECT COALESCE(MAX(id), 1) FROM orders));
+
+INSERT INTO order_items (order_id, product_id, sku, name, quantity, unit_price, subtotal)
+VALUES
+    (1, 1, 'SHP-LTH-01', 'Artisan Leather Weekender', 1, 345.00, 345.00),
+    (1, 5, 'SHP-FTW-05', 'Venetian Suede Loafers', 1, 260.00, 260.00),
+    (2, 2, 'SHP-WCH-02', 'Heritage Chronograph Watch', 1, 520.00, 520.00),
+    (3, 3, 'SHP-APP-03', 'Cashmere Knit Cardigan', 1, 280.00, 280.00),
+    (4, 4, 'SHP-HOM-04', 'Minimalist Brass Desk Lamp', 1, 185.00, 185.00),
+    (5, 1, 'SHP-LTH-01', 'Artisan Leather Weekender', 1, 345.00, 345.00),
+    (5, 10, 'SHP-WCH-10', 'Bauhaus Minimalist Automatic', 1, 410.00, 410.00)
+ON CONFLICT DO NOTHING;
