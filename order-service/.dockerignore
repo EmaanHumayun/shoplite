@@ -1,0 +1,14 @@
+# Order Service Docker Ignore
+target/
+*.class
+*.jar
+.git/
+.gitignore
+.env
+.env.*
+!.env.example
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+README.md
