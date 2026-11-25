@@ -7,7 +7,7 @@ This document details the automated SSL certificate renewal pipeline for the Sho
 ## 1. Overview
 
 - **Script Path:** `scripts/renew-ssl.sh`
-- **Target Domain:** Configurable (defaults to `shoplite.click` via `$SSL_DOMAIN`)
+- **Target Domain:** Configurable (defaults to `cloudcrafters-shoplite.duckdns.org` via `$SSL_DOMAIN`)
 - **Certificate Path:** `/etc/letsencrypt/live/<domain>/fullchain.pem`
 - **Execution Log:** `/var/log/shoplite/ssl-renewal.log`
 - **Renewal Threshold:** Automatically renews when certificate has less than **30 days** of validity remaining.
