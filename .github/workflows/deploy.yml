@@ -46,11 +46,30 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Configure AWS Credentials
+      - name: Debug OIDC token claims
+        run: |
+          set -e
+          TOKEN=$(curl -s -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" | jq -r '.value')
+          python3 -c "
+          import json, base64, sys
+          t = sys.argv[1]
+          payload = t.split('.')[1]
+          padded = payload + '=' * (-len(payload) % 4)
+          data = json.loads(base64.urlsafe_b64decode(padded))
+          print('=== OIDC CLAIMS FROM GITHUB ===')
+          print('iss:           ', data.get('iss'))
+          print('aud:           ', data.get('aud'))
+          print('sub:           ', data.get('sub'))
+          print('repository:    ', data.get('repository'))
+          print('repository_id: ', data.get('repository_id'))
+          print('ref:           ', data.get('ref'))
+          " "$TOKEN"
+
+      - name: Configure AWS Credentials via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION || 'ap-southeast-2' }}
 
       - name: Log in to Amazon ECR
@@ -87,7 +106,7 @@ jobs:
 
             # Auto-create repository in AWS ECR if it does not exist
             aws ecr describe-repositories --repository-names "$REPO" --region "${{ vars.AWS_REGION || 'ap-southeast-2' }}" >/dev/null 2>&1 || \
-            aws ecr create-repository --repository-name "$REPO" --region "${{ vars.AWS_REGION || 'ap-southeast-2' }}"
+            aws ecr create-repository --repository-name "$REPO" --region "${{ vars.AWS_REGION || 'ap-southeast-2' }}" || true
 
             if [ -s "$DIR/Dockerfile" ]; then
               echo "Building image for $DIR..."
@@ -122,11 +141,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Configure AWS Credentials
+      - name: Configure AWS Credentials via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION || 'ap-southeast-2' }}
 
       - name: Check SSH Credentials Availability
