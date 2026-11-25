@@ -9,6 +9,7 @@ import { RecentOrders } from '../components/dashboard/RecentOrders';
 import { InventorySummary } from '../components/dashboard/InventorySummary';
 import { Button } from '../components/common/Button';
 import { Badge } from '../components/common/Badge';
+import { AppLoader } from '../components/common/AppLoader';
 import { formatCurrency, formatNumber } from '../utils/formatters';
 
 export const DashboardPage = () => {
@@ -16,11 +17,7 @@ export const DashboardPage = () => {
   const { isSuperAdmin } = useAuth();
 
   if (loading) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '50vh' }}>
-        <p style={{ color: 'var(--text-muted)' }}>Loading ShopLite Analytics...</p>
-      </div>
-    );
+    return <AppLoader message="Streaming Live Enterprise Commerce Analytics..." />;
   }
 
   return (

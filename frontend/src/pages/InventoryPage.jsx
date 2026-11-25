@@ -1,10 +1,11 @@
-﻿import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Search, SlidersHorizontal, AlertTriangle, Layers } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { Button } from '../components/common/Button';
 import { Badge } from '../components/common/Badge';
 import { StockAdjustModal } from '../components/inventory/StockAdjustModal';
+import { AppLoader } from '../components/common/AppLoader';
 import { formatDate, getStockBadge } from '../utils/formatters';
 
 export const InventoryPage = () => {
@@ -131,7 +132,13 @@ export const InventoryPage = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredInventory.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan={8}>
+                  <AppLoader message="Retrieving Real-Time Inventory Pools from Go Microservice..." />
+                </td>
+              </tr>
+            ) : filteredInventory.length === 0 ? (
               <tr>
                 <td colSpan={8} style={{ textAlign: 'center', padding: '2.5rem' }}>
                   <p style={{ color: 'var(--text-muted)' }}>No inventory records match your criteria.</p>
