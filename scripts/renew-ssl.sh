@@ -10,7 +10,7 @@ set -euo pipefail
 # ------------------------------------------------------------------------------
 # Configuration Variables
 # ------------------------------------------------------------------------------
-DOMAIN="${SSL_DOMAIN:-shoplite.click}"
+DOMAIN="${SSL_DOMAIN:-cloudcrafters-shoplite.duckdns.org}"
 CERT_DIR="${CERT_DIR:-/etc/letsencrypt/live/$DOMAIN}"
 CERT_FILE="$CERT_DIR/fullchain.pem"
 LOG_DIR="/var/log/shoplite"
