@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Menu, Search, Sun, Moon, Shield } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -25,7 +25,7 @@ export const Header = ({ onToggleMobile, searchTerm, onSearchChange }) => {
           <input
             type="text"
             className="search-input"
-            placeholder="Search telemetry, SKU, orders..."
+            placeholder="Search products, orders, inventory, SKU..."
             value={searchTerm || ''}
             onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
           />

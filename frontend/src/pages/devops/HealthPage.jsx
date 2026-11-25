@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Server, CheckCircle2, RefreshCw } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
@@ -11,7 +11,7 @@ export const HealthPage = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1>Microservice Topology &amp; Health Status</h1>
-            <Badge variant="demo">[DEMO METRICS]</Badge>
+            <Badge variant="healthy">LIVE HEALTH CHECKS</Badge>
           </div>
           <p>Real-time distributed healthchecks, network latency, and service dependency graph</p>
         </div>

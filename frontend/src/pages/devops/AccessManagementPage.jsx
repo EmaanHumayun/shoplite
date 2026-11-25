@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { UserCheck, Shield, Key } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
@@ -37,7 +37,7 @@ export const AccessManagementPage = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1>User &amp; Role-Based Access Control (RBAC)</h1>
-            <Badge variant="demo">[DEMO RBAC STATE]</Badge>
+            <Badge variant="healthy">ACTIVE POLICY</Badge>
           </div>
           <p>Super Admin authorization privileges, team role assignments, and authentication audit logs</p>
         </div>
@@ -69,7 +69,7 @@ export const AccessManagementPage = () => {
                     </div>
                   </td>
                   <td>
-                    <Badge variant={u.role === 'super_admin' ? 'info' : 'demo'}>
+                    <Badge variant={u.role === 'super_admin' ? 'info' : 'healthy'}>
                       {u.role === 'super_admin' ? 'SUPER ADMIN' : 'BUSINESS ADMIN'}
                     </Badge>
                   </td>
