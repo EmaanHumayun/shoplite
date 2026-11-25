@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Plus, Search, Edit2, Trash2, Filter } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
@@ -7,6 +7,7 @@ import { Badge } from '../components/common/Badge';
 import { Pagination } from '../components/common/Pagination';
 import { ProductModal } from '../components/products/ProductModal';
 import { DeleteConfirmModal } from '../components/products/DeleteConfirmModal';
+import { AppLoader } from '../components/common/AppLoader';
 import { formatCurrency, getStockBadge } from '../utils/formatters';
 
 const CATEGORIES = [
@@ -164,7 +165,13 @@ export const ProductsPage = () => {
             </tr>
           </thead>
           <tbody>
-            {paginatedProducts.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan={7}>
+                  <AppLoader message="Synchronizing Product Catalog via Node.js Gateway..." />
+                </td>
+              </tr>
+            ) : paginatedProducts.length === 0 ? (
               <tr>
                 <td colSpan={7} style={{ textAlign: 'center', padding: '2.5rem' }}>
                   <p style={{ color: 'var(--text-muted)' }}>No products match your current search and filters.</p>

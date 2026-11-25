@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Search, Eye, ShoppingCart } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
@@ -6,6 +6,7 @@ import { Button } from '../components/common/Button';
 import { Badge } from '../components/common/Badge';
 import { Pagination } from '../components/common/Pagination';
 import { OrderDetailModal } from '../components/orders/OrderDetailModal';
+import { AppLoader } from '../components/common/AppLoader';
 import { formatCurrency, formatDate, getOrderBadge } from '../utils/formatters';
 
 const STATUS_FILTERS = ['All', 'Processing', 'Completed', 'Pending', 'Cancelled'];
@@ -109,7 +110,13 @@ export const OrdersPage = () => {
             </tr>
           </thead>
           <tbody>
-            {paginatedOrders.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan={8}>
+                  <AppLoader message="Streaming Transactions via Spring Boot Order Engine..." />
+                </td>
+              </tr>
+            ) : paginatedOrders.length === 0 ? (
               <tr>
                 <td colSpan={8} style={{ textAlign: 'center', padding: '2.5rem' }}>
                   <p style={{ color: 'var(--text-muted)' }}>No orders match your criteria.</p>
