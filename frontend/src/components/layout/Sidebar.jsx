@@ -58,16 +58,14 @@ export const Sidebar = ({ mobileOpen, onCloseMobile }) => {
   return (
     <>
       {mobileOpen && (
-        <div className="modal-backdrop" style={{ zIndex: 35 }} onClick={onCloseMobile} />
+        <div className="sidebar-backdrop" onClick={onCloseMobile} />
       )}
       <aside className={`sidebar ${mobileOpen ? 'mobile-open' : ''}`}>
         <div className="sidebar-header justify-between">
           <Logo size="md" subtitle={isSuperAdmin ? 'Enterprise Platform' : 'Commerce Suite'} />
-          {mobileOpen && (
-            <button type="button" className="btn-icon" onClick={onCloseMobile} aria-label="Close sidebar">
-              <X size={18} />
-            </button>
-          )}
+          <button type="button" className="btn-icon mobile-close-btn" onClick={onCloseMobile} aria-label="Close sidebar">
+            <X size={20} />
+          </button>
         </div>
 
         <nav className="sidebar-nav">
