@@ -46,11 +46,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Configure AWS Credentials via OIDC
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
-          aws-region: ${{ vars.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION || 'ap-southeast-2' }}
 
       - name: Log in to Amazon ECR
         id: login-ecr
@@ -83,6 +84,10 @@ jobs:
 
             echo "--------------------------------------------------------"
             echo "Processing service: $DIR -> ECR repository: $REPO"
+
+            # Auto-create repository in AWS ECR if it does not exist
+            aws ecr describe-repositories --repository-names "$REPO" --region "${{ vars.AWS_REGION || 'ap-southeast-2' }}" >/dev/null 2>&1 || \
+            aws ecr create-repository --repository-name "$REPO" --region "${{ vars.AWS_REGION || 'ap-southeast-2' }}"
 
             if [ -s "$DIR/Dockerfile" ]; then
               echo "Building image for $DIR..."
@@ -117,11 +122,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Configure AWS Credentials via OIDC
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
-          aws-region: ${{ vars.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION || 'ap-southeast-2' }}
 
       - name: Check SSH Credentials Availability
         id: check-ssh
