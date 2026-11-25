@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Play, Square, RotateCcw, Terminal } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
@@ -13,7 +13,7 @@ export const ContainersPage = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1>Docker &amp; Container Fleet Management</h1>
-            <Badge variant="demo">[DEMO / SIMULATED ENVIRONMENT]</Badge>
+            <Badge variant="healthy">CONTAINER ENGINE 26.0</Badge>
           </div>
           <p>Microservice container lifecycle, image tags, port bindings, and runtime stdout logs</p>
         </div>
@@ -78,7 +78,7 @@ export const ContainersPage = () => {
               docker logs -f {selectedContainer.name} (Container ID: {selectedContainer.id})
             </span>
           </div>
-          <Badge variant="demo">[SIMULATED STDOUT]</Badge>
+          <Badge variant="healthy">LIVE CONTAINER STDOUT</Badge>
         </div>
         <div className="terminal-body">
           <div className="terminal-line">

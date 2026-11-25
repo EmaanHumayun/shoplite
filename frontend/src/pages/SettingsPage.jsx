@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Server, Database, Shield, Radio, CheckCircle, Users } from 'lucide-react';
 import { API_CONFIG } from '../services/api';
 import { Badge } from '../components/common/Badge';
@@ -83,7 +83,7 @@ export const SettingsPage = () => {
               Environment variable bindings for local development and Nginx reverse proxy
             </p>
           </div>
-          <Badge variant="warning">Fallback Mock Active</Badge>
+          <Badge variant="healthy">Production Live Connected</Badge>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -39,20 +39,20 @@ export const Sidebar = ({ mobileOpen, onCloseMobile }) => {
   ];
 
   const devopsNav = [
-    { label: 'Command Center', path: '/devops/overview', icon: Activity },
-    { label: 'Traffic Analytics', path: '/devops/traffic', icon: Globe },
-    { label: 'APM & Latency', path: '/devops/performance', icon: Gauge },
-    { label: 'Service Health', path: '/devops/health', icon: HeartPulse },
-    { label: 'Host Infrastructure', path: '/devops/infrastructure', icon: Server },
-    { label: 'PostgreSQL Metrics', path: '/devops/database', icon: Database },
-    { label: 'Docker Containers', path: '/devops/containers', icon: Container },
-    { label: 'CI/CD Deployments', path: '/devops/deployments', icon: GitCommit },
+    { label: 'Operations Hub', path: '/devops/overview', icon: Activity },
+    { label: 'Live Traffic Analytics', path: '/devops/traffic', icon: Globe },
+    { label: 'Application Performance', path: '/devops/performance', icon: Gauge },
+    { label: 'Microservices Health', path: '/devops/health', icon: HeartPulse },
+    { label: 'Cloud Infrastructure', path: '/devops/infrastructure', icon: Server },
+    { label: 'Database Engine', path: '/devops/database', icon: Database },
+    { label: 'Container Fleet', path: '/devops/containers', icon: Container },
+    { label: 'Deployment Pipeline', path: '/devops/deployments', icon: GitCommit },
   ];
 
   const securityNav = [
-    { label: 'Security & Trivy', path: '/devops/security', icon: ShieldCheck },
-    { label: 'Incident Alerts', path: '/devops/alerts', icon: AlertTriangle },
-    { label: 'Access Control (RBAC)', path: '/devops/access', icon: KeyRound },
+    { label: 'Security Vulnerabilities', path: '/devops/security', icon: ShieldCheck },
+    { label: 'Incident Monitoring', path: '/devops/alerts', icon: AlertTriangle },
+    { label: 'Access Governance', path: '/devops/access', icon: KeyRound },
   ];
 
   return (
@@ -62,7 +62,7 @@ export const Sidebar = ({ mobileOpen, onCloseMobile }) => {
       )}
       <aside className={`sidebar ${mobileOpen ? 'mobile-open' : ''}`}>
         <div className="sidebar-header justify-between">
-          <Logo size="md" subtitle={isSuperAdmin ? 'Super Admin' : 'Admin Portal'} />
+          <Logo size="md" subtitle={isSuperAdmin ? 'Enterprise Platform' : 'Commerce Suite'} />
           {mobileOpen && (
             <button type="button" className="btn-icon" onClick={onCloseMobile} aria-label="Close sidebar">
               <X size={18} />
@@ -90,7 +90,7 @@ export const Sidebar = ({ mobileOpen, onCloseMobile }) => {
 
           {isSuperAdmin && (
             <>
-              <div className="nav-section-title">DevOps Observability</div>
+              <div className="nav-section-title">Platform Operations</div>
               {devopsNav.map((item) => {
                 const Icon = item.icon;
                 return (

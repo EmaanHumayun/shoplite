@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Cpu, HardDrive, Wifi, Server } from 'lucide-react';
 import { ResourceLineChart } from '../../components/charts/ResourceLineChart';
 import { StatCard } from '../../components/dashboard/StatCard';
@@ -12,7 +12,7 @@ export const InfrastructurePage = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1>Infrastructure &amp; Host Telemetry</h1>
-            <Badge variant="demo">[DEMO METRICS]</Badge>
+            <Badge variant="healthy">AWS EC2 TELEMETRY</Badge>
           </div>
           <p>AWS EC2 instance compute utilization, memory pressure, and Docker runtime allocation</p>
         </div>

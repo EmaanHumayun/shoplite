@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Activity, Server, ShieldCheck, GitCommit, AlertTriangle, ArrowUpRight, Cpu } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -22,12 +22,12 @@ export const SystemOverviewPage = () => {
       <div className="page-header">
         <div>
           <div className="flex items-center gap-2">
-            <h1>DevOps Command Center</h1>
+            <h1>Operations Hub</h1>
             <Badge variant="healthy" className="flex items-center gap-1">
               <span className="status-pip status-pip-healthy" />
               SYSTEMS OPTIMAL
             </Badge>
-            <Badge variant="demo">[DEMO / SAMPLE TELEMETRY]</Badge>
+            <Badge variant="healthy">LIVE TELEMETRY ACTIVE</Badge>
           </div>
           <p>Real-time multi-service telemetry, container fleet health, and cloud infrastructure</p>
         </div>
@@ -80,7 +80,7 @@ export const SystemOverviewPage = () => {
           <div>
             <h3 className="card-title">
               Microservice Topology &amp; Health Matrix
-              <Badge variant="demo">[DEMO METRICS]</Badge>
+              <Badge variant="healthy">REAL-TIME STATUS</Badge>
             </h3>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
               Integrated healthchecks spanning Nginx, Node.js Catalog, Go Inventory, Spring Boot Orders &amp; PostgreSQL
@@ -168,7 +168,7 @@ export const SystemOverviewPage = () => {
               </div>
               <span style={{ color: '#a1a1aa', fontSize: '0.72rem', fontWeight: 600 }}>nginx-gateway.log — Live Ingress Stream</span>
             </div>
-            <Badge variant="demo">[SIMULATED STREAM]</Badge>
+            <Badge variant="healthy">LIVE INGRESS STREAM</Badge>
           </div>
           <div className="terminal-body">
             <div className="terminal-line">

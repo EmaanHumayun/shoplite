@@ -1,13 +1,13 @@
-﻿/**
+/**
  * ShopLite Centralized API Client & Service URLs
  * Configures endpoints for Node.js Catalog, Go Inventory, and Java Orders APIs
  */
 
 export const API_CONFIG = {
-  catalogUrl: import.meta.env.VITE_CATALOG_API_URL || 'http://localhost:4000/api',
-  inventoryUrl: import.meta.env.VITE_INVENTORY_API_URL || 'http://localhost:5000/api',
-  ordersUrl: import.meta.env.VITE_ORDERS_API_URL || 'http://localhost:8080/api',
-  isMockMode: import.meta.env.VITE_USE_MOCK !== 'false', // Defaults to mock preview if backend is offline
+  catalogUrl: import.meta.env.VITE_CATALOG_API_URL || '/api',
+  inventoryUrl: import.meta.env.VITE_INVENTORY_API_URL || '/api',
+  ordersUrl: import.meta.env.VITE_ORDERS_API_URL || '/api',
+  isMockMode: import.meta.env.VITE_USE_MOCK === 'true', // Defaults to live APIs in production
 };
 
 /**

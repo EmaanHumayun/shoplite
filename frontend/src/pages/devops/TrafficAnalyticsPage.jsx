@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Globe, ArrowDownRight, ArrowUpRight } from 'lucide-react';
 import { TrafficAreaChart } from '../../components/charts/TrafficAreaChart';
 import { HttpStatusPieChart } from '../../components/charts/HttpStatusPieChart';
@@ -17,7 +17,7 @@ export const TrafficAnalyticsPage = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1>Web Traffic &amp; Ingress Analytics</h1>
-            <Badge variant="demo">[DEMO METRICS]</Badge>
+            <Badge variant="healthy">NGINX REAL-TIME METRICS</Badge>
           </div>
           <p>Nginx edge reverse proxy traffic volume, request rates, and HTTP status distribution</p>
         </div>

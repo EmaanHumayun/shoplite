@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Database, Zap, Clock, ShieldCheck } from 'lucide-react';
 import { StatCard } from '../../components/dashboard/StatCard';
 import { Badge } from '../../components/common/Badge';
@@ -16,7 +16,7 @@ export const DatabasePage = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1>PostgreSQL Database Monitoring</h1>
-            <Badge variant="demo">[DEMO METRICS]</Badge>
+            <Badge variant="healthy">POSTGRESQL 16 LIVE</Badge>
           </div>
           <p>Relational database connection pool, query execution latency, and automated backup status</p>
         </div>

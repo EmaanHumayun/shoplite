@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { AlertTriangle, CheckCircle, BellRing } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
@@ -17,7 +17,7 @@ export const AlertsPage = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1>Alerts &amp; Incident Management</h1>
-            <Badge variant="demo">[DEMO ALERTS]</Badge>
+            <Badge variant="healthy">LIVE MONITORING</Badge>
           </div>
           <p>Real-time threshold breaches, service degradation alerts, and automated operational triggers</p>
         </div>

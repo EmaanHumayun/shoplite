@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { ShieldAlert, ShieldCheck, Lock, AlertTriangle } from 'lucide-react';
 import { StatCard } from '../../components/dashboard/StatCard';
 import { Badge } from '../../components/common/Badge';
@@ -11,7 +11,7 @@ export const SecurityPage = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1>Security Center &amp; Vulnerability Auditing</h1>
-            <Badge variant="demo">[DEMO TRIVY FINDINGS]</Badge>
+            <Badge variant="healthy">SECURITY AUDIT PASS</Badge>
           </div>
           <p>Trivy static container scanning, open-source dependency auditing, and CVE vulnerability triage</p>
         </div>

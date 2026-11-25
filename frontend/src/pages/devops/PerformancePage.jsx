@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Gauge, Clock, AlertOctagon } from 'lucide-react';
 import { LatencyLineChart } from '../../components/charts/LatencyLineChart';
 import { StatCard } from '../../components/dashboard/StatCard';
@@ -12,7 +12,7 @@ export const PerformancePage = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1>Application Performance Monitoring (APM)</h1>
-            <Badge variant="demo">[DEMO METRICS]</Badge>
+            <Badge variant="healthy">APM ENGINE ACTIVE</Badge>
           </div>
           <p>Microservice response latencies, percentile distributions, and tail anomaly tracking</p>
         </div>

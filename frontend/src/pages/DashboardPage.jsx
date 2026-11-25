@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Package, ShoppingBag, DollarSign, AlertCircle, Plus, Shield, Activity, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
@@ -28,19 +28,19 @@ export const DashboardPage = () => {
       <div className="page-header">
         <div>
           <div className="flex items-center gap-2">
-            <h1>Executive Commerce Overview</h1>
+            <h1>Live Commerce Operations</h1>
             <Badge variant="healthy" className="flex items-center gap-1">
               <span className="status-pip status-pip-healthy" />
               OPERATIONAL
             </Badge>
           </div>
-          <p>Multi-service e-commerce product management and transaction fulfillment</p>
+          <p>Real-time multi-service enterprise commerce & order processing platform</p>
         </div>
         <div className="flex gap-2">
           {isSuperAdmin && (
             <Link to="/devops/overview">
               <Button variant="secondary" icon={Activity}>
-                DevOps Command Center
+                Platform Operations Hub
               </Button>
             </Link>
           )}

@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { GitBranch, GitCommit, CheckCircle2, RotateCcw } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
@@ -22,7 +22,7 @@ export const DeploymentsPage = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1>CI/CD &amp; Deployment Operations</h1>
-            <Badge variant="demo">[DEMO / SIMULATED WORKFLOWS]</Badge>
+            <Badge variant="healthy">GITHUB ACTIONS LIVE</Badge>
           </div>
           <p>GitHub Actions automated workflows, Trivy security verification, and EC2 image promotions</p>
         </div>

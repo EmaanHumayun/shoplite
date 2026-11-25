@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 /**
  * ShopLite Official Brand Emblem
@@ -36,7 +36,7 @@ export const LogoIcon = ({ size = 28, className = '' }) => {
   );
 };
 
-export const Logo = ({ size = 'md', subtitle = 'Enterprise Ops', className = '' }) => {
+export const Logo = ({ size = 'md', subtitle = 'Enterprise Cloud', className = '' }) => {
   const iconSize = size === 'sm' ? 22 : size === 'lg' ? 36 : 28;
   const titleSize = size === 'sm' ? '0.95rem' : size === 'lg' ? '1.35rem' : '1.1rem';
 

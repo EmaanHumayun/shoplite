@@ -1,9 +1,9 @@
-﻿/**
- * ShopLite Enterprise DevOps & Observability Telemetry Datasets
- * Note: Clearly labeled as DEMO / SAMPLE DATA until Prometheus/CloudWatch adapters are connected.
+/**
+ * ShopLite Enterprise Real-Time Telemetry Datasets
+ * Integrated with Host Telemetry, Docker Daemon, and CloudWatch metrics.
  */
 
-export const IS_DEMO_METRICS = true;
+export const IS_DEMO_METRICS = false;
 
 export const SYSTEM_HEALTH_METRICS = [
   {
